@@ -1,0 +1,5 @@
+Options +FollowSymlinks
+RewriteEngine on
+RewriteOptions MaxRedirects=10
+
+RewriteRule ^service/(.*)$ serviceManager.php?service=$1&%{QUERY_STRING} [NC]

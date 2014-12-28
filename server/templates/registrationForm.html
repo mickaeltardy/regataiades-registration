@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style>
+body {
+	font-family: Arial;
+	font-size: 6px;
+}
+
+.body {
+	padding-left: 40px;
+	padding-right: 40px;
+	font-size: 11px;
+}
+
+#photo {
+	width: 100px;
+	height: 70px;
+	border: 1px solid #000000;
+	float: right;
+	text-align: center;
+	padding-top: 50px;
+}
+
+.logo {
+	width: 80px;
+	height: 80px;
+	float: left;
+	margin-right: 20px;
+}
+
+#title {
+	float: left;
+	margin-left: 10px;
+	width: auto;
+}
+
+#dataTable {
+	width: 100%;
+}
+
+.data {
+	float: left;
+	width: 100%;
+	padding-bottom: 10px;
+}
+
+.data ul {
+	width: 80%;
+}
+
+hr.half {
+	width: 50%;
+}
+
+.data .field {
+	margin-bottom: 5px;
+	width: auto;
+}
+
+.data .dataGroup {
+	float: left;
+	width: 50%;
+}
+
+.field.important {
+	font-weight: bold;
+}
+
+.data .legend {
+	font-size: 120%;
+	font-weight: bold;
+	border-bottom: 1px #000000 solid;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+
+#confirmationContent ul {
+	width: 100%;
+}
+
+#confirmationContent ul li {
+	padding-bottom: 5px;
+}
+
+#confirmationContent {
+	line-height: 22px;
+}
+
+#confirmationDetails>table>tr>td {
+	padding: 15px;
+}
+
+@PAGE {
+	margin: 0.5cm;
+}
+
+.label:after {
+	content: ": ";
+}
+
+.value {
+	margin-left: 10px;
+	font-style: italic;
+}
+
+.teams {
+	width: 180mm;
+}
+
+.teams td, 
+.teams th {
+    padding: 5px;
+    border:1px #000000 solid;
+    margin: 0px;
+}
+
+h1,h2,h3 {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+table {
+	display: block;
+}
+
+</style>
+</head>
+<body>
+
+    <table style="width: 200mm">
+        <tr>
+            <td style="text-align: left; width: 600px;"><img
+                src="img/logo-ridn-en.gif" /></td>
+            <td style="text-align: right"><img
+                src="img/logo_una_blanc.jpg"
+                style="height: 150px; float: right;" /></td>
+        </tr>
+    </table>
+
+    <h1>{{messages.pdf.title}}</h1>
+    <h1>{{messages.pdf.subtitle}}</h1>
+    <hr />
+
+    <table style="width: 200mm">
+        <tr>
+            <td style="width: 50%;vertical-align: top;">
+                <h2>{{messages.labels.clubIdentity}}</h2>
+                <ul>
+                    <li><span class="label">{{messages.labels.clubName}}</span><span
+                        class="value">{{data.club.name}}</span></li>
+                    <li><span class="label">{{messages.labels.telNumber}}</span><span
+                        class="value">{{data.club.telNumber}}</span></li>
+                    <li><span class="label">{{messages.labels.clubAddress}}</span><span
+                        class="value">{{data.club.address}}</span></li>
+                    <li><span class="label">{{messages.labels.clubCity}}</span><span
+                        class="value">{{data.club.city}}</span></li>
+                    <li><span class="label">{{messages.labels.clubCountry}}</span><span
+                        class="value">{{data.club.country}}</span></li>
+                </ul>
+            </td>
+            <td style="width: 50%;vertical-align: top;">
+                <h2>{{messages.labels.contactPerson}}</h2>
+                <ul>
+                    <li><span class="label">{{messages.labels.name}}</span><span
+                        class="value">{{data.contact.name}}</span></li>
+                    <li><span class="label">{{messages.labels.surname}}</span><span
+                        class="value">{{data.contact.surname}}</span></li>
+                    <li><span class="label">{{messages.labels.email}}</span><span
+                        class="value">{{data.contact.email}}</span></li>
+                    <li><span class="label">{{messages.labels.telNumber}}</span><span
+                        class="value">{{data.contact.telNumber}}</span></li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    {% if (data.crews) %}
+    <h2>{{messages.labels.crews}}</h2>
+    {% for crew in data.crews %}
+    <ul>
+        <li><span class="label">{{messages.labels.category}}</span><span
+            class="value">{{crew.type}}</span></li>
+    </ul>
+    <table style="width: 130mm" class="teams">
+        <tr>
+        
+            <th style="width:15mm;">{{messages.labels.crewCaptain}}</th>
+            <th style="width:35mm;">{{messages.labels.name}}</th>
+            <th style="width:35mm;">{{messages.labels.surname}}</th>
+            <th style="width:35mm;">{{messages.labels.licenceNo}}</th>
+            <th style="width:10mm;">{{messages.labels.sex}}</th>
+            <th style="width:25mm;">{{messages.labels.tshirtSize}}</th>
+        </tr>
+        {% set membersCnt = 0 %} {% for member in crew.members %}
+        <tr>
+            <td>{% if membersCnt == crew.captain %}X{% endif %}</td>
+            <td>{{member.name}}</td>
+            <td>{{member.surname}}</td>
+            <td>{{member.licence}}</td>
+            <td>{{member.sex}}</td>
+            <td>{{member.size}}</td> {% set membersCnt = membersCnt+ 1
+            %}
+        </tr>
+        {% endfor %}
+    </table>
+    {% endfor %} {% endif %} {% if (data.coaches ) %}
+    <h2>{{messages.labels.coaches}}</h2>
+    {% for coach in data.coaches %}
+    <ul>
+        <li><span class="label">{{messages.labels.name}}</span><span
+            class="value">{{coach.name}}</span></li>
+        <li><span class="label">{{messages.labels.surname}}</span><span
+            class="value">{{coach.surname}}</span></li>
+        <li><span class="label">{{messages.labels.sex}}</span><span
+            class="value">{{coach.sex}}</span></li>
+    </ul>
+    {% endfor %} {% endif %}
+
+    <h2>{{messages.labels.hosting}}</h2>
+    <ul>
+        <li><span class="label">{{messages.labels.hostingParty}}</span><span
+            class="value">{{data.meals}}</span></li>
+
+    </ul>
+    {% if data.arrival.length>0 %}
+    <div>
+
+        <h2>{{messages.labels.arrival}}</h2>
+
+        <ul>
+            {% if data.arrival.date %}
+            <li><span class="label">{{messages.labels.arrivalDate}}</span><span
+                class="value">{{data.arrival.date}}</span></li> {% endif %}
+            {% if data.arrival.time %}
+            <li><span class="label">{{messages.labels.arrivalTime}}</span><span
+                class="value">{{data.arrival.time}}</span></li> {% endif %}
+            {% if data.arrival.transport %}
+            <li><span class="label">{{messages.labels.arrivalTransport}}</span><span
+                class="value">{{data.arrival.transport}}</span></li> {% endif
+            %}
+        </ul>
+    </div>
+    {% endif %}
+    <div>
+        {% if data.complementary %}
+        <h1>{{messages.legends.complementary}}</h1>
+        <p>{{data.complementary }}</p>
+        {% endif %}
+    </div>
+    <div>
+        <h2>{{messages.labels.price}}</h2>
+        <ul>
+            <li><span class="label">{{messages.labels.totalPrice}}</span><span
+                class="value"> {{data.totalPrice}}</span></li>
+        </ul>
+    </div>
+    <div>
+        <p>{{messages.pdf.details}}</p>
+
+        <table style="width: 200mm">
+            <tr>
+                <td style="text-align: left; width: 280px;"><img
+                    src="img/logo-ridn-en.gif" /></td>
+                <td style="width: 400px">{{messages.contacts}}</td>
+            </tr>
+        </table>
+
+        <div style="height: 60px">{{messages.pdf.date}}</div>
+        <div style="height: 60px">{{messages.pdf.signature}}</div>
+    </div>
+</body>
+</html>

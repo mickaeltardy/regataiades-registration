@@ -1,0 +1,92 @@
+@CHARSET "UTF-8";
+
+input[type=submit],.button {
+	border: #999999 1px solid;
+	background: #eeeeee;
+	margin: 5px;
+	padding: 5px;
+	display: block;
+	width: auto;
+	float: left;
+	clear: both;
+}
+
+input[type=submit] {
+	font-weight: bold;
+	font-size: 120%;
+	float: none;
+}
+
+input.invalid {
+	background: rgba(255, 0, 0, 0.2);
+}
+
+ol {
+	clear: both;
+}
+
+#total_price {
+	border: 0px;
+	font-weight: bold;
+}
+
+.title,#registrationForm {
+	font-family: 'Lucida Grande', Helvetica, Verdana, sans-serif;
+}
+
+.title {
+	font-size: 230%;
+	color: #3D9FD0;
+}
+
+.title span {
+	color: #000000;
+}
+
+fieldset {
+	padding: 10px;
+	margin: 10px;
+	border: 1px solid #999999;
+}
+
+.item-page {
+	display: none;
+}
+
+div.language {
+	margin: 5px;
+	padding: 5px;
+	background: #999999;
+	color: #000000;
+	float: left;
+	display: inline;
+	font-weight: bold;
+}
+
+div.language.selected {
+	background: #3D9FD0;
+}
+
+div.form,div.selectLanguage {
+	clear: both;
+	width: 100%;
+	display: block;
+	float: none;
+}
+
+input[type=text],input[type=date],input[type=email],input[type=password],textarea
+	{
+	padding: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	width: 100%;
+	border: 1px solid #999999;
+}
+
+ul.notifications>li.warning {
+	background: #FF9000;
+}
+
+ul.notifications>li.error {
+	background: #FF0000;
+}

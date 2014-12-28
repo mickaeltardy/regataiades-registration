@@ -1,0 +1,307 @@
+<html lang="en" data-ng-app="registrationApp">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title></title>
+<script src="lib/jquery/jquery-1.10.1.js"></script>
+<script src="lib/angular/angular.js"></script>
+
+<script src="js/registration.js"></script>
+<link rel="stylesheet" href="css/main.css" media="all" type="text/css" />
+
+</head>
+<body data-ng-controller="RegistrationCtrl">
+    <h2 class="title" style="visibility: visible;">
+        {{messages.title}}</h2>
+    <div class="selectLanguage">
+        <div>Select your language:</div>
+
+        <div
+            data-ng-class="{'language': true, 'selected':language == 'en'}"
+            data-ng-click="changeLanguage('en')">
+            EN</a>
+        </div>
+        <div
+            data-ng-class="{'language': true, 'selected':language == 'fr'}"
+            data-ng-click="changeLanguage('fr')">FR</div>
+    </div>
+    <div class="form">
+        <form method="post" id="registrationForm"
+            novalidate="novalidate">
+            <div id="step1" class="step">
+                <fieldset id="clubIdentityFs">
+                    <legend> {{messages.labels.clubIdentity}} </legend>
+                    <ol>
+                        <li><label for="club_name">{{messages.labels.clubName}}</label>
+                            <input id="club_name" type="text"
+                            name="data[team][name]" required="required"
+                            data-ng-model="registration.club.name" /></li>
+                        <li><label for="club_tel_number">{{messages.labels.telNumber}}</label>
+                            <input id="club_tel_number" type="text"
+                            name="data[team][tel]"
+                            placeholder="+(XX)XXXXXXX"
+                            required="required"
+                            data-ng-model="registration.club.telNumber" /></li>
+                        <li><label for="club_address">{{messages.labels.clubAddress}}</label>
+                            <input id="club_address" type="text"
+                            name="data[team][address]"
+                            required="required"
+                            data-ng-model="registration.club.address" /></li>
+                        <li><label for="club_city">{{messages.labels.clubCity}}</label>
+                            <input id="club_city" type="text"
+                            name="data[team][city]" required="required"
+                            data-ng-model="registration.club.city" /></li>
+                        <li><label for="club_country">{{messages.labels.clubCountry}}</label>
+                            <input id="club_country" type="text"
+                            name="data[team][country]"
+                            required="required"
+                            data-ng-model="registration.club.country" /></li>
+
+                    </ol>
+                </fieldset>
+                <fieldset id="contactPersonFs">
+                    <legend>{{messages.labels.contactPerson}}</legend>
+                    <ol>
+                        <li><label for="name">{{messages.labels.name}}</label>
+                            <input id="name" type="text"
+                            name="data[contact][name]"
+                            required="required"
+                            data-ng-model="registration.contact.name" /></li>
+                        <li><label for="surname">{{messages.labels.surname}}</label>
+                            <input id="surname" type="text"
+                            name="data[contact][surname]"
+                            required="required"
+                            data-ng-model="registration.contact.surname" /></li>
+                        <li><label for="tel_number">{{messages.labels.telNumber}}
+                        </label> <input id="tel_number" type="text"
+                            name="data[contact][tel]"
+                            placeholder="+(XX)XXXXXXX"
+                            required="required"
+                            data-ng-model="registration.contact.telNumber" /></li>
+                        <li><label for="email">{{messages.labels.email}}</label>
+                            <input id="email" type="email"
+                            name="data[contact][email]"
+                            placeholder="your@email.com"
+                            required="required"
+                            data-ng-model="registration.contact.email" /></li>
+                    </ol>
+                </fieldset>
+            </div>
+            <div id="step2" class="step">
+                <fieldset id="crewsFs">
+                    <legend> {{messages.labels.crews}} </legend>
+                    <span class="button" name="add_crew" id="add_crew"
+                        data-ng-click="addCrew()">{{messages.values.addCrew}}</span>
+
+                    <div id="crews">
+                        <div data-ng-repeat="crew in registration.crews"
+                            class="crew" id="crew_{{crew.id}}">
+                            <span class="button"
+                                data-ng-click="removeCrew($index)">{{messages.labels.delete}}</span>
+                            <ol>
+                                <li><label
+                                    for="crew_{{crew.id}}_type">{{messages.labels.category}}</label>
+                                    <select data-ng-model="crew.type"
+                                    data-ng-change="changeCrewType(crew)"
+                                    id="crew_{{crew.id}}_type">
+                                        <option value="">---</option>
+                                        <option
+                                            data-ng-repeat="boat in boats"
+                                            value="{{boat}}">{{messages.boats[boat].label}}</option>
+                                </select></li>
+                                <li
+                                    data-ng-show="crew.members && crew.members.length > 0">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>{{messages.labels.crewCaptain}}</th>
+                                                <th>{{messages.labels.place}}</th>
+                                                <th>{{messages.labels.name}}</th>
+                                                <th>{{messages.labels.surname}}</th>
+                                                <th>{{messages.labels.licenceNo}}</th>
+                                                <th>{{messages.labels.sex}}</th>
+                                                <th>{{messages.labels.tshirtSize}}</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                data-ng-repeat="member in crew.members"
+                                                class="memberItem">
+                                                <td><input
+                                                    type="radio"
+                                                    name="data[crew][{{crew.id}}][capatain]"
+                                                    data-ng-model="crew.captain"
+                                                    value="{{$index}}" />
+                                                </td>
+                                                <td>
+                                                    {{getPlaceLabel(crew,
+                                                    $index)}}</td>
+                                                <td><input
+                                                    type="text"
+                                                    data-ng-model="member.name"
+                                                    placeholder="{{messages.labels.name}}" />
+                                                </td>
+                                                <td><input
+                                                    type="text"
+                                                    data-ng-model="member.surname"
+                                                    placeholder="{{messages.labels.surname}}" />
+                                                </td>
+                                                <td><input
+                                                    type="text"
+                                                    data-ng-model="member.licence"
+                                                    placeholder="{{messages.labels.licencePlaceholder}}" />
+                                                </td>
+                                                <td><input
+                                                    id="crew_{{crew.id}}_member_{{$index+1}}_sex_m"
+                                                    name="data[crews][{{crew.id}}][members][{{$index+1}}][sex]"
+                                                    data-ng-model="member.sex"
+                                                    type="radio"
+                                                    value="M" /> <label
+                                                    for="crew_{{crew.id}}_member_{{$index+1}}_sex_m">{{messages.labels.sexes.m}}</label>
+                                                    <input
+                                                    id="crew_{{crew.id}}_member_{{$index+1}}_sex_f"
+                                                    name="data[crews][{{crew.id}}][members][{{$index+1}}][sex]"
+                                                    data-ng-model="member.sex"
+                                                    type="radio"
+                                                    value="F" /> <label
+                                                    for="crew_{{crew.id}}_member_{{$index+1}}_sex_f">{{messages.labels.sexes.f}}</label>
+                                                </td>
+                                                <td><select
+                                                    data-ng-model="member.size">
+                                                        <option
+                                                            value="XS">XS</option>
+                                                        <option
+                                                            value="S">S</option>
+                                                        <option
+                                                            value="M">M</option>
+                                                        <option
+                                                            value="L">L</option>
+                                                        <option
+                                                            value="XL">XL</option>
+                                                        <option
+                                                            value="XXL">XXL</option>
+                                                </select></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+
+                </fieldset>
+                <fieldset id="coachFs">
+                    <legend> {{messages.labels.coaches}} </legend>
+                    <span class="button" name="add_coach" id="add_coach"
+                        data-ng-click="addCoach()">{{messages.values.addCoach}}</span>
+                    <div id="coaches">
+                        <div
+                            data-ng-repeat="coach in registration.coaches"
+                            id="coach_{{coach.id}}" class="coach">
+                            <span id="coach_{{coach.id}}_delete"
+                                class="button"
+                                data-ng-click="removeCoach($index)">{{messages.labels.delete}}</span>
+                            <ol>
+                                <li><label
+                                    for="coach_{{coach.id}}_name">{{messages.labels.name}}</label>
+                                    <input type="text"
+                                    id="coach_{{coach.id}}_name"
+                                    data-ng-model="coach.name" /></li>
+                                <li><label
+                                    for="coach_{{coach.id}}_surname">{{messages.labels.surname}}</label>
+                                    <input type="text"
+                                    id="coach_{{coach.id}}_surname"
+                                    data-ng-model="coach.surname" /></li>
+                                <li><label>{{messages.labels.sex}}</label>
+                                    <input id="crew_{{coach.id}}_sex_m"
+                                    name="data[coaches][{{coach.id}}][sex]"
+                                    data-ng-model="coach.sex"
+                                    type="radio" value="M" /> <label
+                                    id="crew_{{coach.id}}_sex_m">{{messages.labels.sexes.m}}</label>
+                                    <input id="crew_{{coach.id}}_sex_f"
+                                    name="data[coaches][{{coach.id}}][sex]"
+                                    data-ng-model="coach.sex"
+                                    type="radio" value="F" /> <label
+                                    id="crew_{{coach.id}}_sex_f">{{messages.labels.sexes.f}}</label>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+            </div>
+            <div id="step3" class="step">
+                <fieldset id="arrivalFs">
+                    <legend> {{messages.labels.arrival}} </legend>
+                    <ol>
+                        <li><label for="arrival_date">{{messages.labels.arrivalDate}}
+                        </label> <input id="arrival_date" type="date"
+                            name="data[team][info][arrival][date]"
+                            placeholder="dd/mm/yyyy"
+                            data-ng-model="registration.arrival.date" /></li>
+                        <li><label for="arrival_time">{{messages.labels.arrivalTime}}
+                        </label> <input id="arrival_time" type="time"
+                            name="data[team][info][arrival][time]"
+                            placeholder="hh:mm"
+                            data-ng-model="registration.arrival.time" /></li>
+                        <li><label for="arrival_transport">{{messages.labels.arrivalTransport}}</label>
+                            <input id="arrival_transport"
+                            list="characters" type="text"
+                            name="data[team][info][arrival][transport]"
+                            data-ng-model="registration.arrival.transport" />
+                            <datalist id="characters">
+                                <option
+                                    data-ng-repeat="transport in messages.labels.transport">{{transport}}</option>
+                            </datalist></li>
+                    </ol>
+                </fieldset>
+
+
+                <fieldset id="hostingFs">
+                    <legend> {{messages.labels.hosting}} </legend>
+                    <ol>
+                        <li><label for="hosting_party">{{messages.labels.hostingParty}}</label>
+                            <select data-ng-model="registration.meals"
+                            id="hosting_party"
+                            name="data[team][info][hosting][dinner]">
+                                <option value="0">{{messages.values.partyNone}}</option>
+                                <option value="1">{{messages.values.partyOne}}</option>
+                                <option value="2">{{messages.values.partyTwo}}
+                                    (+20 Euros)</option>
+                        </select></li>
+                    </ol>
+                    <p id="mealsInfo"></p>
+                </fieldset>
+
+            </div>
+            <div id="step4" class="step">
+                <fieldset id="priceFs">
+                    <legend> {{messages.labels.price}} </legend>
+                    <p id="priceInfo"></p>
+                    <ol>
+                        <li><label for="total_price">{{messages.labels.totalPrice}}</label>
+                            {{getTotalPrice()}}</li>
+                    </ol>
+                </fieldset>
+                <fieldset id="complementaryFs">
+                    <legend> {{messages.labels.complementary}}
+                    </legend>
+                    <textarea id="complementary_text"
+                        name="data[complementary]"
+                        data-ng-model="registration.details"></textarea>
+                </fieldset>
+                <button data-ng-click="submitForm()">{{messages.values.submit}}</button>
+            </div>
+
+        </form>
+        <ul class="notifications">
+            <li data-ng-repeat="notification in notifications"
+                class="notification.type">{{notification.text}}</li>
+        </ul>
+        <p>* - {{messages.labels.requiredFields}}</p>
+    </div>
+</body>
+</html>
